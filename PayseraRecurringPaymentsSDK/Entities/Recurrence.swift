@@ -3,7 +3,7 @@ import PayseraCommonSDK
 import PayseraAccountsSDK
  
 public class Recurrence: Mappable {
-    public var id: Int!
+    public var hash: String!
     public var status: String!
     public var type: String!
     public var transferType: String!
@@ -18,7 +18,7 @@ public class Recurrence: Mappable {
     }
     
     public func mapping(map: Map) {
-        id <- map["id"]
+        hash <- map["hash"]
         status <- map["status"]
         type <- map["recurrence_type"]
         transferType <- map["transfer_type"]
