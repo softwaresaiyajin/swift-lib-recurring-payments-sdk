@@ -8,11 +8,10 @@ public class RecurringPaymentsApiClientFactory {
         tokenRefresher: PSTokenRefresherProtocol? = nil,
         logger: PSLoggerProtocol? = nil
     ) -> RecurringPaymentsApiClient {
-        let sessionManager = SessionManager()
-        sessionManager.adapter = PSRequestAdapter(credentials: credentials)
+        let session = Session(interceptor: PSRequestAdapter(credentials: credentials))
         
         return RecurringPaymentsApiClient(
-            sessionManager: sessionManager,
+            session: session,
             credentials: credentials,
             tokenRefresher: tokenRefresher,
             logger: logger
