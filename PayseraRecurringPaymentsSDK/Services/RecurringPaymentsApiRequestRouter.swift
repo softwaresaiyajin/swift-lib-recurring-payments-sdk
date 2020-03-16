@@ -6,35 +6,39 @@ public enum RecurringPaymentsApiRequestRouter: URLRequestConvertible {
     static var baseURLString = "https://recurring-payments.paysera.com/recurrence/rest/v1"
     
     // MARK: - GET
-    case getRecurrence(id: Int)
+    case getRecurrence(id: String)
     case getRecurrences(filter: RecurrenceFilter)
-    case getRecurrenceTransfers(id: Int, filter: PSBaseFilter)
+    case getRecurrenceTransfers(id: String, filter: PSBaseFilter)
     
     // MARK: - POST
     case createRecurrence(recurrence: Recurrence)
+    case repeatRecurrenceTransfer(recurrenceId: String, transferId: String)
     
     // MARK: - PUT
-    case updateRecurrence(id: Int, recurrence: Recurrence)
+    case updateRecurrence(id: String, recurrence: Recurrence)
+    case activateRecurrence(id: String)
+    case deactivateRecurrence(id: String)
     
     // MARK: - DELETE
-    case cancelRecurrence(id: Int)
+    case cancelRecurrence(id: String)
     
     private var method: HTTPMethod {
         switch self {
-            case .getRecurrence(_):
-                return .get
-            case .getRecurrences(_):
-                return .get
-            case .getRecurrenceTransfers(_, _):
+            case .getRecurrence,
+                 .getRecurrences,
+                 .getRecurrenceTransfers:
                 return .get
             
-            case .createRecurrence(_):
+            case .createRecurrence,
+                 .repeatRecurrenceTransfer:
                 return .post
             
-            case .updateRecurrence(_, _):
+            case .updateRecurrence,
+                 .activateRecurrence,
+                 .deactivateRecurrence:
                 return .put
             
-            case .cancelRecurrence(_):
+            case .cancelRecurrence:
                 return .delete
         }
     }
@@ -53,8 +57,17 @@ public enum RecurringPaymentsApiRequestRouter: URLRequestConvertible {
             case .createRecurrence(_):
                 return "/recurrences"
             
+            case let .repeatRecurrenceTransfer(recurrenceId, transferId):
+                return "/recurrences/\(recurrenceId)/transfers/\(transferId)/repeat"
+            
             case .updateRecurrence(let id, _):
                 return "/recurrences/\(id)"
+            
+            case .activateRecurrence(let id):
+                return "/recurrences/\(id)/activate"
+            
+            case .deactivateRecurrence(id: let id):
+                return "/recurrences/\(id)/deactivate"
             
             case .cancelRecurrence(let id):
                 return "/recurrences/\(id)"

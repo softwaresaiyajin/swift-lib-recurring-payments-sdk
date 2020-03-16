@@ -21,51 +21,58 @@ class PayseraRecurringPaymentsSDKTests: XCTestCase {
     }
     
     func testGetRecurrence() {
+        var object: Recurrence?
         let expectation = XCTestExpectation(description: "")
 
         apiClient
-            .getRecurrence(id: 7)
-            .done { obj in
-                print(obj)
+            .getRecurrence(id: "")
+            .done { recurrence in
+                object = recurrence
             }.catch { error in
                 print(error)
             }.finally { expectation.fulfill() }
 
         wait(for: [expectation], timeout: 3.0)
+        XCTAssertNotNil(object)
     }
     
     func testGetRecurrences() {
+        var object: PSMetadataAwareResponse<Recurrence>?
         let expectation = XCTestExpectation(description: "")
         
         let filter = RecurrenceFilter()
+        filter.accountNumbers = [""]
         apiClient
             .getRecurrences(filter: filter)
             .done { obj in
-                print(obj)
+                object = obj
             }.catch { error in
                 print(error)
             }.finally { expectation.fulfill() }
 
         wait(for: [expectation], timeout: 3.0)
+        XCTAssertNotNil(object)
     }
     
     func testGetRecurrenceTransfers() {
+        var object: PSMetadataAwareResponse<PSTransfer>?
         let expectation = XCTestExpectation(description: "")
-               
         let filter = RecurrenceFilter()
         
         apiClient
-            .getRecurrenceTransfers(id: 7, filter: filter)
+            .getRecurrenceTransfers(id: "", filter: filter)
             .done { obj in
-                print(obj.items)
+                object = obj
             }.catch { error in
                 print(error)
             }.finally { expectation.fulfill() }
 
         wait(for: [expectation], timeout: 3.0)
+        XCTAssertNotNil(object)
     }
     
     func testCreateRecurrence() {
+        var object: Recurrence?
         let expectation = XCTestExpectation(description: "")
         
         let transfer = PSTransfer()
@@ -91,15 +98,17 @@ class PayseraRecurringPaymentsSDKTests: XCTestCase {
         apiClient
             .createRecurrence(recurrence)
             .done { obj in
-                print(obj)
+                object = obj
             }.catch { error in
                 print(error)
             }.finally { expectation.fulfill() }
         
         wait(for: [expectation], timeout: 3.0)
+        XCTAssertNotNil(object)
     }
     
     func testUpdateRecurrence() {
+        var object: Recurrence?
         let expectation = XCTestExpectation(description: "")
             
         let transfer = PSTransfer()
@@ -123,26 +132,73 @@ class PayseraRecurringPaymentsSDKTests: XCTestCase {
         recurrence.transfer = transfer
         
         apiClient
-            .updateRecurrence(id: 7, recurrence: recurrence)
+            .updateRecurrence(id: "", recurrence: recurrence)
             .done { obj in
-                print(obj)
+                object = obj
             }.catch { error in
                 print(error)
             }.finally { expectation.fulfill() }
         
         wait(for: [expectation], timeout: 3.0)
+        XCTAssertNotNil(object)
     }
     
     func testCancelRecurrence() {
         let expectation = XCTestExpectation(description: "")
             
         apiClient
-            .cancelRecurrence(id: 10)
+            .cancelRecurrence(id: "")
             .done { _ in
-                print("Canceled")
-            }.catch { error in
+                expectation.fulfill()
+            }
+            .catch { error in
                 print(error)
-            }.finally { expectation.fulfill() }
+            }
+        
+        wait(for: [expectation], timeout: 3.0)
+    }
+    
+    func testRepeatTransfer() {
+        let expectation = XCTestExpectation(description: "")
+        
+        apiClient
+            .repeatRecurrenceTransfer(recurrenceId: "", transferId: "")
+            .done { _ in
+                expectation.fulfill()
+            }
+            .catch { error in
+                print(error)
+            }
+        
+        wait(for: [expectation], timeout: 3.0)
+    }
+    
+    func testActivateRecurrence() {
+        let expectation = XCTestExpectation(description: "")
+        
+        apiClient
+            .activateRecurrence(id: "")
+            .done { _ in
+                expectation.fulfill()
+            }
+            .catch { error in
+                print(error)
+            }
+        
+        wait(for: [expectation], timeout: 3.0)
+    }
+    
+    func testDeactivateRecurrence() {
+        let expectation = XCTestExpectation(description: "")
+        
+        apiClient
+            .deactivateRecurrence(id: "")
+            .done { _ in
+                expectation.fulfill()
+            }
+            .catch { error in
+                print(error)
+            }
         
         wait(for: [expectation], timeout: 3.0)
     }
