@@ -9,7 +9,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "PayseraCommonSDK", url: "https://github.com/paysera/swift-lib-common-sdk", from: "3.0.1"),
-        .package(name: "PayseraAccountsSDK", url: "https://github.com/paysera/swift-lib-accounts-sdk", from: "6.0.2")
+        .package(name: "PayseraAccountsSDK", url: "https://github.com/softwaresaiyajin/swift-lib-accounts-sdk", .branch("APPIOS-2549"))
     ],
     targets: [
         .target(
